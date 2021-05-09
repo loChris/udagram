@@ -4,6 +4,10 @@ Parameters:
   EnvironmentName:
     Description: An environment name that will be prefixed to resource names
     Type: String
+  SecGroupCidr:
+    Description: CidrIp for security groups
+    Type: String
+    Default: 0.0.0.0/0
 
 Resources:
   LBSecGroup:
@@ -17,12 +21,12 @@ Resources:
       - IpProtocol: tcp
         FromPort: 80
         ToPort: 80
-        CidrIp: 0.0.0.0/0
+        CidrIp: !Ref SecGroupCidr
       SecurityGroupEgress:
       - IpProtocol: tcp
         FromPort: 80
         ToPort: 80
-        CidrIp: 0.0.0.0/0
+        CidrIp: !Ref SecGroupCidr
       
   WebServerSecGroup:
     Type: AWS::EC2::SecurityGroup
@@ -35,16 +39,16 @@ Resources:
       - IpProtocol: tcp
         FromPort: 8080
         ToPort: 8080
-        CidrIp: 0.0.0.0/0
+        CidrIp: !Ref SecGroupCidr
       - IpProtocol: tcp
         FromPort: 22
         ToPort: 22
-        CidrIp: 0.0.0.0/0
+        CidrIp: !Ref SecGroupCidr
       SecurityGroupEgress:
       - IpProtocol: tcp
         FromPort: 0
         ToPort: 65535
-        CidrIp: 0.0.0.0/0
+        CidrIp: !Ref SecGroupCidr
     
   WebAppLaunchConfig:
     Type: AWS::AutoScaling::LaunchConfiguration
